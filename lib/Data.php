@@ -46,27 +46,28 @@
         }
 
         // Get data values to generate a Google Charts based graph
-        public static function getGoogleChartsGraphData($key, $value, $descriptor, $limit) {
+        public static function getGoogleChartsGraphData($key, $value, $limit) {
             $key = Database::get_mysql()->real_escape_string($key);
             $value = Database::get_mysql()->real_escape_string($value);
 
             if($limit == -1) {
-                $sql = "SELECT date_received, message_payload FROM iot_data WHERE $key='$value' ORDER BY date_received ASC";
+                $sql = "SELECT *, DATE_FORMAT(date_received, '%Y-%m-%dT%T+0100') AS date_formatted FROM iot_data WHERE $key='$value' ORDER BY date_received ASC";
             } else {
-                $sql = "SELECT date_received, message_payload FROM (SELECT date_received, message_payload FROM iot_data WHERE $key='$value' ORDER BY date_received DESC LIMIT  $limit) sub ORDER BY date_received ASC";
+                $sql = "SELECT * FROM (SELECT *, DATE_FORMAT(date_received, '%Y-%m-%dT%T+0100') AS date_formatted FROM iot_data WHERE $key='$value' ORDER BY date_received DESC LIMIT  $limit) sub ORDER BY date_received ASC";
             }
 
             $result = Database::get_mysql()->query($sql);
 
-            $complete = array();
-            $complete[] = array(array('label' => 'Date', 'type' => 'string'), $descriptor);
+            $date = array();
+            $series = array();
             
             while($row = $result->fetch_assoc())  {
-                $dataset = array($row['date_received'], (double) $row['message_payload']);
-                $complete[] = $dataset;
+                $date[] = $row['date_formatted'];
+                $series[] = $row['message_payload'];
             }
 
-            return json_encode($complete);
+            return array($date, $series);
         }
+
     }
 ?>

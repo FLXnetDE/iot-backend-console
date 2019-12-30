@@ -3,14 +3,21 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable(
-            <?php echo Data::getGoogleChartsGraphData('topic_name', 'weather/weatherstation001/temperature', 'Test temperature in °C'); ?>
-        );
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('datetime', 'DateTime');
+        data.addColumn('number', 'Value');
+
+        <?php 
+          $data = Data::getGoogleChartsGraphDataTest('topic_name', 'weather/weatherstation001/temperature', 150);
+          for($i = 0; $i < sizeof($data[0]); $i++) {
+            echo 'data.addRow([new Date("'.$data[0][$i].'"), '.$data[1][$i].']);';
+          }
+        ?>
 
         var options = {
             title: 'Test graph',
             curveType: 'function',
-            vAxis: {title: "Temperature in °C"},
             legend:{position:'none'},
             crosshair: {"trigger" : "both"}
         };

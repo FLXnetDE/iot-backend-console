@@ -11,7 +11,9 @@
         $limit = 25;
     } else {
         $limit = $_GET['limit'];
-    }    
+    }
+
+    $data = Data::getGoogleChartsGraphData('topic_name', $monitor['source'], $limit);
 ?>
 <div class="card">
     <h5 class="card-header">
@@ -36,6 +38,23 @@
 </div>
 <br>
 <div class="card">
+    <div class="card-header">
+        <?php
+            if($limit == -1) {
+                ?>
+                    <i class="fas fa-filter"></i>&nbsp;Showing all available datasets, starting from 
+                <?php
+            } else {
+                ?>
+                    <i class="fas fa-filter"></i>&nbsp;Showing the last <strong><?php echo $limit; ?></strong> datasets, starting from 
+                <?php
+            }
+        ?>
+        <?php
+            $d = new DateTime($data[0][0]);
+            echo '<strong>'.$d->format('Y-m-d').'</strong>';
+        ?>
+    </div>
     <div class="card-body">
         <div id="chart" style="height: 400px; width: 100%"></div>
         <hr>
@@ -58,22 +77,21 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable(
-            <?php echo Data::getGoogleChartsGraphData('topic_name', $monitor['source'], $monitor['name'].' in '.$monitor['unit'], $limit); ?>
-        );
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('datetime', 'DateTime');
+        data.addColumn('number', '<?php echo $monitor['name'].' in '.$monitor['unit']; ?>');
+
+        <?php
+          for($i = 0; $i < sizeof($data[0]); $i++) {
+            echo 'data.addRow([new Date("'.$data[0][$i].'"), '.$data[1][$i].']);';
+          }
+        ?>
 
         var options = {
             curveType: 'function',
-            legend: { 
-                position: 'none'
-            },
-            crosshair: {
-                'trigger' : 'both'
-            },
-            hAxis: { 
-                textPosition: 'bottom',
-                format : 'MMM yyyy'
-            }
+            legend: {position:'none'},
+            crosshair: {'trigger' : 'both'}
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('chart'));
