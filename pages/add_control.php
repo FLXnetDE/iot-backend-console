@@ -78,11 +78,11 @@
                                 <br>
                                 <div class="form-group">
                                     <label>Value for state <span class="badge badge-success">ON</span></label>
-                                    <input name="type_value" type="text" class="form-control">
+                                    <input name="value_on" type="text" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label>Value for state <span class="badge badge-danger">OFF</span></label>
-                                    <input name="type_unit" type="text" class="form-control">
+                                    <input name="value_off" type="text" class="form-control">
                                 </div>
                                 <input type="hidden" name="unit_name" value="<?php echo $unit_name; ?>">
                                 <input type="hidden" name="icon" value="<?php echo $icon; ?>">
@@ -110,7 +110,7 @@
                 $result = ControlMonitor::create($id, $unit_name, $icon, $_POST['source'], $_POST['unit']);
                 break;
             case "SWITCH":
-
+                $result = ControlSwitch::create($id, $unit_name, $icon, $_POST['type_destination'], $_POST['value_on'], $_POST['value_off']);
                 break;
         }
 

@@ -21,7 +21,7 @@
                                 $data = Data::filterLatestDataset('topic_name', $monitor['source']);
                                 ?>
                                     <li class="list-group-item">
-                                        <?php echo $monitor['icon']; ?>&nbsp;<?php echo $monitor['name']; ?>
+                                        <?php echo '<i class="'.$monitor['icon'].'"></i>'; ?>&nbsp;<?php echo $monitor['name']; ?>
 
                                         <?php
                                             if(empty($data['message_payload'])) {
@@ -31,7 +31,10 @@
                                             } else {
                                                 ?>
                                                     <strong><?php echo $data['message_payload'].$monitor['unit']; ?></strong>
-                                                    <span class="badge badge-primary float-right">
+                                                    <a href="?p=history&id=<?php echo $monitor['id']; ?>" class="btn btn-success btn-sm float-right">
+                                                        <i class="fas fa-chart-line"></i>
+                                                    </a>
+                                                    <span class="badge badge-primary float-right" style="margin-right: 15px">
                                                         <?php echo $data['date_received']; ?>
                                                     </span>
                                                 <?php
@@ -45,21 +48,27 @@
                                 ?>
                                     <li class="list-group-item">
                                         <?php
-                                            echo $switch['icon']; ?>&nbsp;<?php echo $switch['name'];
+                                            echo '<i class="'.$switch['icon'].'"></i>'; ?>&nbsp;<?php echo $switch['name'];
 
-                                            if($switch['state'] == 0) {
+                                            if(MqttOverHttp::checkAvailability() != null) {
+                                                if($switch['state'] == 0) {
+                                                    ?>
+                                                        <span class="badge badge-danger">Inactive</span>
+                                                        <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=1" class="btn btn-success btn-sm float-right" style="width: 120px">
+                                                            <i class="fas fa-power-off"></i>&nbsp;ON
+                                                        </a>
+                                                    <?php
+                                                } else if($switch['state'] == 1) {
+                                                    ?>
+                                                        <span class="badge badge-success">Active</span>
+                                                        <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=0" class="btn btn-danger btn-sm float-right" style="width: 120px">
+                                                            <i class="fas fa-power-off"></i>&nbsp;OFF
+                                                        </a>
+                                                    <?php
+                                                }
+                                            } else {
                                                 ?>
-                                                    <span class="badge badge-danger">Inactive</span>
-                                                    <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=1" class="btn btn-success btn-sm float-right" style="width: 120px">
-                                                        <i class="fas fa-power-off"></i>&nbsp;ON
-                                                    </a>
-                                                <?php
-                                            } else if($switch['state'] == 1) {
-                                                ?>
-                                                    <span class="badge badge-success">Active</span>
-                                                    <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=0" class="btn btn-danger btn-sm float-right" style="width: 120px">
-                                                        <i class="fas fa-power-off"></i>&nbsp;OFF
-                                                    </a>
+                                                    <span class="badge badge-secondary float-right">IOT Backend application is not reachable</span>
                                                 <?php
                                             }
                                         ?>

@@ -10,9 +10,9 @@
         }
 
         // Create new control switch
-        public static function create($unit_group_id, $name, $icon, $destination, $value_1, $value_0, $state) {
+        public static function create($unit_group_id, $name, $icon, $destination, $value_1, $value_0) {
             $sql = "INSERT INTO iot_control_switches (name, icon, destination, value_1, value_0, state) 
-                        VALUES ('$name', '$icon', '$destination', '$value_1', '$value_0', '$state')";
+                        VALUES ('$name', '$icon', '$destination', '$value_1', '$value_0', '0')";
             $con = Database::get_mysql();
             $con->query($sql);
             $unit_id = $con->insert_id;

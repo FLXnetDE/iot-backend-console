@@ -9,7 +9,10 @@
 </div>
 <br>
 <div class="card">
-    <h5 class="card-header"><i class="fas fa-server"></i>&nbsp;IOT Backend application availability</h5>
+    <h5 class="card-header">
+        <i class="fas fa-server"></i>&nbsp;IOT Backend application availability 
+        <span class="badge badge-secondary"><?php echo MqttOverHttp::getConnectionInfo()[0].':'.MqttOverHttp::getConnectionInfo()[1]; ?></span>
+    </h5>
     <div class="card-body">
         <?php
             $response = MqttOverHttp::checkAvailability();

@@ -24,7 +24,7 @@
                         ?>
                             <div class="card">
                                 <h5 class="card-header">
-                                    <?php echo $monitor['icon']; ?>&nbsp;<?php echo $monitor['name']; ?>
+                                    <?php echo '<i class="'.$monitor['icon'].'"></i>'; ?>&nbsp;<?php echo $monitor['name']; ?>
                                     <div class="badge badge-primary"><?php echo $monitor['source']; ?></div>
                                     <a href="?p=history&id=<?php echo $control['control_id']; ?>" class="btn btn-success btn-sm"><i class="fas fa-chart-area"></i>&nbsp;Show graph</a>
                                 </h5>
@@ -50,7 +50,7 @@
                         ?>
                             <div class="card">
                                 <h5 class="card-header">
-                                    <?php echo $switch['icon']; ?>&nbsp;<?php echo $switch['name']; ?>
+                                    <?php echo '<i class="'.$switch['icon'].'"></i>'; ?>&nbsp;<?php echo $switch['name']; ?>
                                     <div class="badge badge-primary"><?php echo $switch['destination']; ?></div>
                                     <?php
                                         if($switch['state'] == 0) {
@@ -62,17 +62,23 @@
                                 </h5>
                                 <div class="card-body">
                                     <?php
-                                        if($switch['state'] == 0) {
+                                        if(MqttOverHttp::checkAvailability() != null) {
+                                            if($switch['state'] == 0) {
+                                                ?>
+                                                    <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=1" class="btn btn-success btn-block">
+                                                        <i class="fas fa-power-off"></i>&nbsp;ON
+                                                    </a>
+                                                <?php
+                                            } else if($switch['state'] == 1) {
+                                                ?>
+                                                    <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=0" class="btn btn-danger btn-block">
+                                                        <i class="fas fa-power-off"></i>&nbsp;OFF
+                                                    </a>
+                                                <?php
+                                            }
+                                        } else {
                                             ?>
-                                                <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=1" class="btn btn-success btn-block">
-                                                    <i class="fas fa-power-off"></i>&nbsp;ON
-                                                </a>
-                                            <?php
-                                        } else if($switch['state'] == 1) {
-                                            ?>
-                                                <a href="?p=switch&id=<?php echo $switch['id']; ?>&state=0" class="btn btn-danger btn-block">
-                                                    <i class="fas fa-power-off"></i>&nbsp;OFF
-                                                </a>
+                                                <span class="badge badge-secondary">IOT Backend application is not reachable</span>
                                             <?php
                                         }
                                     ?>

@@ -26,5 +26,11 @@
             return $response;
         }
 
+        // Returns the connection information of the HTTP / MQTT server/broker
+        public static function getConnectionInfo() {
+            $ini = parse_ini_file('app.ini');
+            return array($ini['broker_host'], $ini['broker_http_port']);
+        }
+
     }
 ?>

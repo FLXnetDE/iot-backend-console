@@ -37,5 +37,36 @@
             return Database::get_mysql()->query($sql)->fetch_assoc();
         }
 
+        // Filter data by key - value
+        public static function filterData($key, $value) {
+            $key = Database::get_mysql()->real_escape_string($key);
+            $value = Database::get_mysql()->real_escape_string($value);
+            $sql = "SELECT * FROM iot_data WHERE $key='$value' ORDER BY date_received";
+            return Database::get_mysql()->query($sql);
+        }
+
+        // Get data values to generate a Google Charts based graph
+        public static function getGoogleChartsGraphData($key, $value, $descriptor, $limit) {
+            $key = Database::get_mysql()->real_escape_string($key);
+            $value = Database::get_mysql()->real_escape_string($value);
+
+            if($limit == -1) {
+                $sql = "SELECT date_received, message_payload FROM iot_data WHERE $key='$value' ORDER BY date_received ASC";
+            } else {
+                $sql = "SELECT date_received, message_payload FROM (SELECT date_received, message_payload FROM iot_data WHERE $key='$value' ORDER BY date_received DESC LIMIT  $limit) sub ORDER BY date_received ASC";
+            }
+
+            $result = Database::get_mysql()->query($sql);
+
+            $complete = array();
+            $complete[] = array(array('label' => 'Date', 'type' => 'string'), $descriptor);
+            
+            while($row = $result->fetch_assoc())  {
+                $dataset = array($row['date_received'], (double) $row['message_payload']);
+                $complete[] = $dataset;
+            }
+
+            return json_encode($complete);
+        }
     }
 ?>
