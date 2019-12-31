@@ -58,6 +58,8 @@
 
             $result = Database::get_mysql()->query($sql);
 
+            if($result->num_rows == 0) return null;
+
             $date = array();
             $series = array();
             

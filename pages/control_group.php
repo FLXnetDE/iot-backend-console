@@ -26,7 +26,13 @@
                                 <h5 class="card-header">
                                     <?php echo '<i class="'.$monitor['icon'].'"></i>'; ?>&nbsp;<?php echo $monitor['name']; ?>
                                     <div class="badge badge-primary"><?php echo $monitor['source']; ?></div>
-                                    <a href="?p=history&id=<?php echo $control['control_id']; ?>" class="btn btn-success btn-sm"><i class="fas fa-chart-area"></i>&nbsp;Show graph</a>
+                                    <?php
+                                        if(!empty($data['message_payload'])) {
+                                            ?>
+                                                <a href="?p=history&id=<?php echo $control['control_id']; ?>" class="btn btn-success btn-sm"><i class="fas fa-chart-area"></i>&nbsp;Show graph</a>
+                                            <?php
+                                        }
+                                    ?>
                                 </h5>
                                 <div class="card-body">
                                     <?php

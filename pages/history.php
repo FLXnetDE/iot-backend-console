@@ -14,6 +14,12 @@
     }
 
     $data = Data::getGoogleChartsGraphData('topic_name', $monitor['source'], $limit);
+
+    if(is_null($data)) {
+        Notification::setSession('warning', 'fas fa-exclamation', 'No data history found for '.$monitor['name']);
+        Helper::redirect('index');
+        return;
+    }
 ?>
 <div class="card">
     <h5 class="card-header">
