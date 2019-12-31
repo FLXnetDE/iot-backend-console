@@ -51,8 +51,7 @@
             }
         ?>
         <?php
-            $d = new DateTime($data[0][0]);
-            echo '<strong>'.$d->format('Y-m-d').'</strong>';
+            echo '<strong>'.Helper::getDate($data[0][0]).'</strong>';
         ?>
     </div>
     <div class="card-body">
@@ -84,7 +83,7 @@
 
         <?php
           for($i = 0; $i < sizeof($data[0]); $i++) {
-            echo 'data.addRow([new Date("'.$data[0][$i].'"), '.$data[1][$i].']);';
+            echo 'data.addRow([new Date('.$data[0][$i].'), '.$data[1][$i].']);';
           }
         ?>
 

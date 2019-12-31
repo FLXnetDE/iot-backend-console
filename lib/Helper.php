@@ -24,7 +24,7 @@
         // Convert milliseconds to date string / format
         public static function getDate($milliseconds) {
             $seconds = $milliseconds / 1000;
-            return date("d.m.Y H:i:s", $seconds);
+            return date("Y-m-d H:i:s", $seconds);
         }
 
         // Get current unix timestamp (milliseconds)

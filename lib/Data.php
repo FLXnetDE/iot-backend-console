@@ -51,9 +51,9 @@
             $value = Database::get_mysql()->real_escape_string($value);
 
             if($limit == -1) {
-                $sql = "SELECT *, DATE_FORMAT(date_received, '%Y-%m-%dT%T+0100') AS date_formatted FROM iot_data WHERE $key='$value' ORDER BY date_received ASC";
+                $sql = "SELECT *, (UNIX_TIMESTAMP(date_received)*1000) AS date_formatted FROM iot_data WHERE $key='$value' ORDER BY date_received ASC";
             } else {
-                $sql = "SELECT * FROM (SELECT *, DATE_FORMAT(date_received, '%Y-%m-%dT%T+0100') AS date_formatted FROM iot_data WHERE $key='$value' ORDER BY date_received DESC LIMIT  $limit) sub ORDER BY date_received ASC";
+                $sql = "SELECT * FROM (SELECT *, (UNIX_TIMESTAMP(date_received)*1000) AS date_formatted FROM iot_data WHERE $key='$value' ORDER BY date_received DESC LIMIT $limit) sub ORDER BY date_received ASC";
             }
 
             $result = Database::get_mysql()->query($sql);
