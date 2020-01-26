@@ -45,6 +45,22 @@
             return Database::get_mysql()->query($sql);
         }
 
+        // Get total amount of datasets
+        public static function countData() {
+          $sql = "SELECT COUNT(*) AS totalAmount FROM iot_data";
+          return Database::get_mysql()->query($sql)->fetch_assoc()['totalAmount'];
+        }
+
+        // Databse logic for pagination
+        public static function pagination($page, $recordsPerPage) {
+          $offset = ($page - 1) * $recordsPerPage;
+
+          $totalPages = ceil(Data::countData() / $recordsPerPage);
+
+          $sql = "SELECT * FROM iot_data LIMIT $offset, $recordsPerPage";
+          return Database::get_mysql()->query($sql);
+        }
+
         // Get data values to generate a Google Charts based graph
         public static function getGoogleChartsGraphData($key, $value, $limit) {
             $key = Database::get_mysql()->real_escape_string($key);
@@ -62,7 +78,7 @@
 
             $date = array();
             $series = array();
-            
+
             while($row = $result->fetch_assoc())  {
                 $date[] = $row['date_formatted'];
                 $series[] = $row['message_payload'];

@@ -12,7 +12,6 @@
                 <tr>
                     <th scope="col">id</th>
                     <th scope="col">Device name</th>
-                    <th scope="col">Device key</th>
                     <th scope="col">Is locked</th>
                     <th scope="col">Action</th>
                 </tr>
@@ -24,14 +23,23 @@
                             <tr>
                                 <th><?php echo $d['id']; ?></th>
                                 <td><?php echo $d['device_name']; ?></td>
-                                <td><?php echo $d['device_key']; ?></td>
                                 <?php
                                     if($d['is_locked'] == 0) {
-                                        echo '<td><span class="badge badge-success">No</span></td>';
-                                        echo '<td><a href="?p=lock_device&id='.$d['id'].'" class="btn btn-danger btn-sm"><i class="fas fa-lock"></i></a></td>';
+                                      ?>
+                                        <td><span class="badge badge-success">No</span></td>
+                                        <td>
+                                          <a href="?p=lock_device&id= <?php echo $d['id']; ?>" class="btn btn-danger btn-sm"><i class="fas fa-lock"></i></a>
+                                          <a href="?p=regenerate_key&id=<?php echo $d['id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-redo"></i></a>
+                                        </td>
+                                      <?php
                                     } else {
-                                        echo '<td><span class="badge badge-danger">Yes</span></td>';
-                                        echo '<td><a href="?p=unlock_device&id='.$d['id'].'" class="btn btn-success btn-sm"><i class="fas fa-lock-open"></i></a></td>';
+                                        ?>
+                                          <td><span class="badge badge-danger">Yes</span></td>
+                                          <td>
+                                            <a href="?p=unlock_device&id=<?php echo $d['id']; ?>" class="btn btn-success btn-sm"><i class="fas fa-lock-open"></i></a>
+                                            <a href="?p=regenerate_key&id=<?php echo $d['id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-redo"></i></a>
+                                          </td>
+                                        <?php
                                     }
                                 ?>
                             </tr>
@@ -44,3 +52,4 @@
 </div>
 <br>
 <a href="?p=add_device" class="btn btn-success btn-sm"><i class="fas fa-plus"></i>&nbsp;Add device</a>
+<br>

@@ -16,5 +16,17 @@
             return Database::get_mysql()->query($sql)->fetch_assoc();
         }
 
+        // Request a list of the currently connected devices on the iot-backend-application
+        public static function getConnectedClients() {
+            $ini = parse_ini_file('app.ini');
+            $request = curl_init('http://'.$ini['broker_host'].':'.$ini['broker_http_port'].'/clients');
+            curl_setopt($request, CURLOPT_HEADER, 0);
+            curl_setopt($request, CURLOPT_POST, 0);
+            curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($request);
+            curl_close($request);
+            return $response;
+        }
+
     }
 ?>
